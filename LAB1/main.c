@@ -18,7 +18,7 @@ int main(void) {
 	*apb2enr |= 0x0001C;
 	*GPIO_C_CRH = 0x00300000;
 
-	while(true) {
+	while(1) {
 
 		char elem = mor[i % length];
 		if(elem == '.') {
