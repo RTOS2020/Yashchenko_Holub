@@ -1,42 +1,47 @@
 #include "stm32f10x.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_rcc.h"
 
-void delay(int ms) {
-	for(int i = 0; i < 10000 * ms; i++) { }
+enum states{
+	GPIO_PORT_ON = 800,
+	GPIO_PORT_OFF = 0
+};
+
+
+void led_on();
+void led_off();
+
+void SysTick_Handler(void){
+	timestamp++;
 }
 
-int main(void) {
-	char mor[] = {'.', '.','.', '_','_','_', ' ', '.','.','.', '_','_','_', ' ', '.', '_'};
-
-	int length = sizeof(mor) / sizeof(char);
-	int *GPIO_C_CRH = (int*)(0x00100000);
-	int *GPIO_C_ODR = (int*)(0x00002000);
-	int *apb2enr = (int*)0x40021018;
-	int i = 0;
-
-	*apb2enr |= 0x0001C;
-	*GPIO_C_CRH = 0x00300000;
-
-	while(1) {
-
-		char elem = mor[i % length];
-		if(elem == '.') {
-			*GPIO_C_ODR=0x00000100;
-			delay(150);
-		} else if(elem == '_') {
-			*GPIO_C_ODR=0x00000100;
-			delay(300);
-		} else if(elem == ' ') {
-			*GPIO_C_ODR=0x0000000;
-			delay(600);
+int main(void)
+{
+  int timestamp = 0;
+	
+	// initilize
+	RCC->APB2ENR = 0b1100; //B, A
+	GPIOB->CRH = 0x300; //B8, B9
+	GPIOA->CRL = 0x6; //A1, A2
+	RCC_ClocksTypeDef RCC_Clocks;
+	RCC_GetClocksFreq(&RCC_Clocks);
+	SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
+	
+	while(1){
+		switch(timestamp % 1000){
+		case GPIO_PORT_ON:
+			led_on();
+			timestamp -= 1000;
+			break;
+		case GPIO_PORT_OFF:
+			led_off();
+			break;
 		}
-		
-		i++;
-
-		if(i % length == length - 1) {
-			delay(3000);
-			i = 0;
-		};
 	}
+}
+
+
+void led_on(){
+	GPIOA->ODR = 0b1000000;
+}
+void led_off(){
+	GPIOA->ODR = 0;
 }
