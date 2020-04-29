@@ -9,6 +9,10 @@ enum states{
 void led_on();
 void led_off();
 
+void SysTick_Handler(void){
+	timestamp++;
+}
+
 int main(void)
 {
   int timestamp = 0;
