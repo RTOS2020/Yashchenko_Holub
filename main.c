@@ -55,6 +55,12 @@ int main(void)
 		
 		delay(80);
   }
+	
+void TIM2_IRQHandler()
+{
+	timer++; // we use interrupts to increase timer to save versality of delay
+	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+}
 }
 
 
