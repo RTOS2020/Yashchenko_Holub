@@ -477,14 +477,18 @@ ARM Macro Assembler    Page 8
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\startup_stm32f10x_md.d -o.\objects\startup_stm32f10x_md.
-o -I.\RTE\Device\STM32F103C8 -I.\RTE\_Target_1 -IC:\Users\1\AppData\Local\Arm\P
-acks\ARM\CMSIS\5.6.0\CMSIS\Core\Include -IC:\Users\1\AppData\Local\Arm\Packs\Ke
-il\STM32F1xx_DFP\2.3.0\Device\Include -IC:\Users\1\AppData\Local\Arm\Packs\Keil
-\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc -IC:\Users\1\AppData\Local\Arm
-\Packs\Keil\STM32F1xx_DFP\2.3.0\RTE_Driver --predefine="__EVAL SETA 1" --predef
-ine="__UVISION_VERSION SETA 529" --predefine="_RTE_ SETA 1" --predefine="STM32F
-10X_MD SETA 1" --list=.\listings\startup_stm32f10x_md.lst RTE\Device\STM32F103C
-8\startup_stm32f10x_md.s
+o -I.\RTE\CMSIS -I.\RTE\Device\STM32F103C8 -I.\RTE\_Target_1 -IC:\Users\1\AppDa
+ta\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include -IC:\Users\1\AppData\Loca
+l\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\DSP\Include -IC:\Users\1\AppData\Local\Arm\Pa
+cks\ARM\CMSIS\5.7.0\CMSIS\RTOS2\Include -IC:\Users\1\AppData\Local\Arm\Packs\AR
+M\CMSIS\5.7.0\CMSIS\RTOS2\RTX\Include -IC:\Users\1\AppData\Local\Arm\Packs\ARM\
+CMSIS\5.7.0\CMSIS\RTOS2\RTX\Include1 -IC:\Users\1\AppData\Local\Arm\Packs\Keil\
+STM32F1xx_DFP\2.3.0\Device\Include -IC:\Users\1\AppData\Local\Arm\Packs\Keil\ST
+M32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc -IC:\Users\1\AppData\Local\Arm\Pa
+cks\Keil\STM32F1xx_DFP\2.3.0\RTE_Driver --predefine="__RTX SETA 1" --predefine=
+"__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 529" --predefine="_RTE_ SET
+A 1" --predefine="STM32F10X_MD SETA 1" --list=.\listings\startup_stm32f10x_md.l
+st RTE\Device\STM32F103C8\startup_stm32f10x_md.s
 
 
 
@@ -1210,4 +1214,4 @@ Symbol: __use_two_region_memory
       None
 Comment: __use_two_region_memory unused
 3 symbols
-410 symbols in table
+411 symbols in table

@@ -1,42 +1,60 @@
-#include "stm32f10x.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_rcc.h"
+#include "STM32F10x.h"
+#include <cmsis_os.h>
+#include "STM32F10x_gpio.h"
+#include "STM32F10x_rcc.h"
 
 void delay(int ms) {
-	for(int i = 0; i < 10000 * ms; i++) { }
+    for (int i = 0; i < 6666 * ms; i++) {}
 }
 
+void led_thread1(void const *argument) // Flash LED 1
+{
+    for (;;) {
+        GPIO_SetBits(GPIOA, GPIO_Pin_0);
+        delay(500);
+        GPIO_ResetBits(GPIOA, GPIO_Pin_0);
+        delay(500);
+    }
+}
+
+void led_thread2(void const *argument) // Flash LED 2
+
+{
+    for (;;) {
+        GPIO_SetBits(GPIOA, (GPIO_Pin_1));
+        delay(800);
+        GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+        delay(800);
+    }
+}
+
+/*----------------------------------------------------------------------------
+ Define the thread handles and thread parameters
+ *---------------------------------------------------------------------------*/
+
+osThreadId main_ID, led_ID1, led_ID2, led_ID3;
+osThreadDef(led_thread2, osPriorityNormal,1, 0);
+osThreadDef(led_thread1, osPriorityNormal,1, 0);
+
 int main(void) {
-	char mor[] = {'.', '.','.', '_','_','_', ' ', '.','.','.', '_','_','_', ' ', '.', '_'};
+    GPIO_InitTypeDef LAB_6_GPIO_A; // New struct for GPIO_InitStruct
+    // void RCC_AHBPeriphClockCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState)
+    // 1064 stm32f10x_rcc.h
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    //void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct);
+    //352 stm32f10x_gpio.h
 
-	int length = sizeof(mor) / sizeof(char);
-	int *GPIO_C_CRH = (int*)(0x00100000);
-	int *GPIO_C_ODR = (int*)(0x00002000);
-	int *apb2enr = (int*)0x40021018;
-	int i = 0;
 
-	*apb2enr |= 0x0001C;
-	*GPIO_C_CRH = 0x00300000;
-
-	while(1) {
-
-		char elem = mor[i % length];
-		if(elem == '.') {
-			*GPIO_C_ODR=0x00000100;
-			delay(150);
-		} else if(elem == '_') {
-			*GPIO_C_ODR=0x00000100;
-			delay(300);
-		} else if(elem == ' ') {
-			*GPIO_C_ODR=0x0000000;
-			delay(600);
-		}
-		
-		i++;
-
-		if(i % length == length - 1) {
-			delay(3000);
-			i = 0;
-		};
-	}
+    GPIO_StructInit(&LAB_6_GPIO_A);
+    LAB_6_GPIO_A.GPIO_Pin =
+            GPIO_Pin_5 |
+            GPIO_Pin_6;
+    LAB_6_GPIO_A.GPIO_Mode = GPIO_Mode_Out_PP;
+    LAB_6_GPIO_A.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &LAB_6_GPIO_A);
+    osKernelInitialize();                    // initialize CMSIS-RTOS
+    led_ID1 = osThreadCreate(osThread(led_thread1), NULL);
+    led_ID2 = osThreadCreate(osThread(led_thread2), NULL);
+    osKernelStart();                         // start thread execution
+    while (1) { ; }
 }
